@@ -1,3 +1,4 @@
+using HotelHosting.Configurations;
 using HotelHosting.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -19,6 +20,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",b=>b.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 });
+
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 

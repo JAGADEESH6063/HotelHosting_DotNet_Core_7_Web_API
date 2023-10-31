@@ -1,4 +1,6 @@
-﻿namespace HotelHosting.Data
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HotelHosting.Data
     {
     public class Country
         {
