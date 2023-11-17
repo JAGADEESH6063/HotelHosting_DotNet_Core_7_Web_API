@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelHosting.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
 using HotelHosting.Models.Country;
 using AutoMapper;
 using HotelHosting.Repository.Interfaces;
-using HotelHosting.Repository.Implementation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelHosting.Controllers
-{
+    {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CountriesController : ControllerBase
     {
         private readonly ICountryRepository _countryRepository;
@@ -28,6 +23,7 @@ namespace HotelHosting.Controllers
 
         // GET: api/Countries
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetCountries()
         {
           var countries = await _countryRepository.GetAllAsync();
@@ -46,6 +42,7 @@ namespace HotelHosting.Controllers
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<GetCountryByIdDTO>> GetCountry(int id)
         {
             var country = await _countryRepository.GetCountryWithHotelsList(id);
@@ -72,6 +69,7 @@ namespace HotelHosting.Controllers
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutCountry(int id, UpdateCountryDTO updateCountryDTO)
         {
             if (id != updateCountryDTO.Id)
@@ -108,6 +106,7 @@ namespace HotelHosting.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Country>> PostCountry(CountryDTO createCountry)
         {
             /*
@@ -135,6 +134,7 @@ namespace HotelHosting.Controllers
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> DeleteCountry(int id)
         {
             /*if (_context.Countries == null)
