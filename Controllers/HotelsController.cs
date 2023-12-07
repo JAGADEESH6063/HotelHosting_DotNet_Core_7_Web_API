@@ -12,6 +12,7 @@ using HotelHosting.Models.Hotel;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using HotelHosting.ExceptionMiddleWare;
 
 namespace HotelHosting.Controllers
 {
@@ -30,7 +31,6 @@ namespace HotelHosting.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        [Authorize(Roles = "User")]
         public async Task<ActionResult<IEnumerable<HotelDTO>>> GetHotels()
         {
           var hotels = await _hotelRepository.GetAllAsync();
@@ -43,13 +43,12 @@ namespace HotelHosting.Controllers
 
         // GET: api/Hotels/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "User")]
         public async Task<ActionResult<HotelDTO>> GetHotel(int id)
         {
             var hotel = await _hotelRepository.GetAsync(id);
           if (hotel == null)
           {
-              return NotFound();
+                throw new NotFoundException(nameof(GetHotel), id);
           }
             return Ok(_mapper.Map<HotelDTO>(hotel));
         }
@@ -67,7 +66,7 @@ namespace HotelHosting.Controllers
             var hotel = await _hotelRepository.GetAsync(id);
             if(hotel == null)
                 {
-                return NotFound();
+                throw new NotFoundException(nameof(GetHotel), id);
                 }
             _mapper.Map(hotelDto, hotel);
             //_context.Entry(hotel).State = EntityState.Modified;
@@ -121,7 +120,7 @@ namespace HotelHosting.Controllers
             var hotel = await _hotelRepository.GetAsync(id);
             if (hotel == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(GetHotel), id);
             }
             await _hotelRepository.DeleteAsync(id);
             return NoContent();

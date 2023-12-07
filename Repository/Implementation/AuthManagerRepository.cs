@@ -15,12 +15,15 @@ namespace HotelHosting.Repository.Implementation
         private readonly IMapper _mapper;
         private readonly UserManager<ApiUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthManagerRepository> _logger;
 
-        public AuthManagerRepository(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration)
+        public AuthManagerRepository(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration,
+            ILogger<AuthManagerRepository> logger)
             {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
+            _logger = logger;
             }
 
 
@@ -82,6 +85,7 @@ namespace HotelHosting.Repository.Implementation
             if (user == null || !isValid) return null;
 
             var token = await GenerateToken(user);
+            _logger.LogInformation($"Token Generated for the email id: {loginDto.Email} || Token:{token}");
 
             return new TokenDto { 
                 Token = token,
