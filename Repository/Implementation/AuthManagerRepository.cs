@@ -31,14 +31,15 @@ namespace HotelHosting.Repository.Implementation
         public async Task<IEnumerable<IdentityError>> Register(ApiUserDTO apiUserDTO)
             {
 
-            var user = new ApiUser
+            /*var user = new ApiUser
                 {
                 FirstName = apiUserDTO.FirstName,
                 LastName = apiUserDTO.LastName,
                 UserName = apiUserDTO.Email,
                 Email = apiUserDTO.Email,
-                };
-            //var user = _mapper.Map<ApiUser>(apiUserDTO); 
+                };*/
+            var user = _mapper.Map<ApiUser>(apiUserDTO);
+            user.UserName = apiUserDTO.Email;
             // Automapper is not working for the conversion
             var result = await _userManager.CreateAsync(user, apiUserDTO.Password);
             if (result.Succeeded)
@@ -50,14 +51,15 @@ namespace HotelHosting.Repository.Implementation
         public async Task<IEnumerable<IdentityError>> RegisterAdmin(ApiUserDTO apiUserDTO)
             {
 
-            var user = new ApiUser
+            /*var user = new ApiUser
                 {
                 FirstName = apiUserDTO.FirstName,
                 LastName = apiUserDTO.LastName,
                 UserName = apiUserDTO.Email,
                 Email = apiUserDTO.Email,
-                };
-            //var user = _mapper.Map<ApiUser>(apiUserDTO); 
+                };*/
+            var user = _mapper.Map<ApiUser>(apiUserDTO);
+            user.UserName = apiUserDTO.Email;
             // Automapper is not working for the conversion
             var result = await _userManager.CreateAsync(user, apiUserDTO.Password);
             if (result.Succeeded)

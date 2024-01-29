@@ -39,6 +39,21 @@ namespace HotelHosting.Controllers
 
           return Ok(records);
         }
+        // GET: api/Countries
+        [HttpGet("GetPagedCountries")]
+        public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetPagedCountries([FromQuery] QueryParameters queryParameters)
+            {
+            var getPagedCountries = await _countryRepository.GetAllAsync<CountryDTO>(queryParameters);
+
+            if (getPagedCountries == null)
+                {
+                return NotFound("No record found of Countries");
+                }
+
+            /*var Countries = await _context.Countries.ToListAsync();*/
+
+            return Ok(getPagedCountries);
+            }
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
@@ -105,7 +120,6 @@ namespace HotelHosting.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Country>> PostCountry(CountryDTO createCountry)
         {
             /*

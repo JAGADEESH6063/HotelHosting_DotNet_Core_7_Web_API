@@ -1,4 +1,6 @@
-﻿namespace HotelHosting.Repository.Interfaces
+﻿using HotelHosting.Data;
+
+namespace HotelHosting.Repository.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -9,5 +11,7 @@
         Task DeleteAsync(int id);
         Task UpdateAsync(T entity);
         Task<bool> Exists(int id);
+
+        Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParametrs); 
     }
 }
